@@ -105,6 +105,7 @@ const CameraPopup = ({ onClose, generateChatbotResponse, appendMessage }) => {
 
   const handleSendToAPI = async () => {
     const canvas = canvasRef.current;
+    // const videoRef = useRef(null);
 
     if (canvas) {
       const context = canvas.getContext('2d');
