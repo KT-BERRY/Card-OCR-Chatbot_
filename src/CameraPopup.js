@@ -108,14 +108,14 @@ const CameraPopup = ({ onClose, generateChatbotResponse, appendMessage }) => {
 
     if (canvas) {
       const context = canvas.getContext('2d');
-      context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
+      // context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
 
       const img_path = canvas.toDataURL('image/jpg');
 
       const imgBlob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpg')); // Change to JPEG format
 
       const formData = new FormData();
-      formData.append('img_path', imgBlob, 'captured_image.jpg'); // Assuming the API expects 'img_path' as the key
+      formData.append('img_path', imgBlob, 'img_path.jpg'); // Assuming the API expects 'img_path' as the key
 
       try {
         const response = await axios.post('https://demo.botaiml.com/card-ocr/image-ocr-extraction', formData, {
