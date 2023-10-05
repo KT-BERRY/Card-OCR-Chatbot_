@@ -81,25 +81,25 @@ const CameraPopup = ({ onClose, generateChatbotResponse, appendMessage }) => {
   
     //     const imageSrcData = canvas.toDataURL('image/png');
         
-    //     // // Send the captured image to the API for text recognition
-    //     // try {
-    //     //   const response = await axios.post('https://demo.botaiml.com/card-ocr/image-ocr-extraction', {
-    //     //     image: imageSrcData,
-    //     //   });
+    //     // Send the captured image to the API for text recognition
+    //     try {
+    //       const response = await axios.post('https://demo.botaiml.com/card-ocr/image-ocr-extraction', {
+    //         image: imageSrcData,
+    //       });
   
-    //     //   // Extract text from the API response
-    //     //   const recognizedText = response.data.text;
+    //       // Extract text from the API response
+    //       const recognizedText = response.data.text;
   
-    //     //   // Pass the recognized text to your chatbot logic
-    //     //   const responseMessage = generateChatbotResponse(recognizedText);
+    //       // Pass the recognized text to your chatbot logic
+    //       const responseMessage = generateChatbotResponse(recognizedText);
   
-    //     //   // Update messages state
-    //     //   appendMessage('chatbot', responseMessage);
+    //       // Update messages state
+    //       appendMessage('chatbot', responseMessage);
   
-    //     //   setImageSrc(imageSrcData); // Show captured image
-    //     // } catch (error) {
-    //     //   console.error('Error processing image:', error);
-    //     // }
+    //       setImageSrc(imageSrcData); // Show captured image
+    //     } catch (error) {
+    //       console.error('Error processing image:', error);
+    //     }
     //   }
   };
 
@@ -142,8 +142,8 @@ const CameraPopup = ({ onClose, generateChatbotResponse, appendMessage }) => {
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
       }
-    } catch (err) {
-      console.error('Error accessing the camera:', err);
+    } catch (error) {
+      console.error('Error accessing the camera:', error);
     }
   };
 
