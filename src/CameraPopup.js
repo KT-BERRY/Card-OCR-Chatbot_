@@ -112,7 +112,7 @@ const CameraPopup = ({ onClose, generateChatbotResponse, appendMessage }) => {
 
       const img_path = canvas.toDataURL('image/jpg');
 
-      const imgBlob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg')); // Change to JPEG format
+      const imgBlob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpg')); // Change to JPEG format
 
       const formData = new FormData();
       formData.append('img_path', imgBlob, 'captured_image.jpg'); // Assuming the API expects 'img_path' as the key
@@ -122,7 +122,7 @@ const CameraPopup = ({ onClose, generateChatbotResponse, appendMessage }) => {
           headers: {
             'Content-Type': 'multipart/form-data'
           },
-          image: img_path
+          img_path: img_path
         });
 
         const recognizedText = response.data.text;
