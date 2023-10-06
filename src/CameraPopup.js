@@ -108,7 +108,7 @@ const CameraPopup = ({ onClose, generateChatbotResponse, appendMessage }) => {
     // const videoRef = useRef(null);
 
     if (canvas) {
-      const context = canvas.getContext('2d');
+      // const context = canvas.getContext('2d');
       // context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
 
       const img_path = canvas.toDataURL('image/jpg');
@@ -126,11 +126,12 @@ const CameraPopup = ({ onClose, generateChatbotResponse, appendMessage }) => {
           img_path: img_path
         });
 
-        const recognizedText = response.data;
-        // const recognizedTextString = recognizedText.join('\n');
-        // const responseMessage = generateChatbotResponse(recognizedText);
-        appendMessage('chatbot', recognizedText);
-
+        const recognizedTextArray = response.data;
+        const recognizedTextMessage = recognizedTextArray.map((item, index) => (
+          <div key={index}>{item}</div>
+        ));
+        appendMessage('chatbot', recognizedTextMessage);
+    
         // setImageSrc(img_path); // Show captured image
 
         onClose();
