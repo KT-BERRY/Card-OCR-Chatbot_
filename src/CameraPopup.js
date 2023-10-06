@@ -126,11 +126,15 @@ const CameraPopup = ({ onClose, generateChatbotResponse, appendMessage }) => {
           img_path: img_path
         });
 
-        const recognizedText = response.data.text;
-        const responseMessage = generateChatbotResponse(recognizedText);
-        appendMessage('chatbot', responseMessage);
+        const recognizedText = response.data;
+        // const recognizedTextString = recognizedText.join('\n');
+        // const responseMessage = generateChatbotResponse(recognizedText);
+        appendMessage('chatbot', recognizedText);
 
-        setImageSrc(img_path); // Show captured image
+        // setImageSrc(img_path); // Show captured image
+
+        onClose();
+
       } catch (error) {
         console.error('Error processing image:', error);
       }
@@ -174,7 +178,7 @@ const CameraPopup = ({ onClose, generateChatbotResponse, appendMessage }) => {
             <img src={imageSrc} alt="Captured" style={{ maxWidth: '100%', height: 'auto' }}/>
             <button onClick={handleSaveImage}>Save</button>
             <button onClick={handleRetakeImage}>Retake</button>
-            <button onClick={handleSendToAPI}>Send</button> {/* New button */}
+            <button onClick={handleSendToAPI}>Send</button> 
           </>
         ) : (
           <video ref={videoRef} autoPlay playsInline />
