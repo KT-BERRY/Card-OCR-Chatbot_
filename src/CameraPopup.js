@@ -74,33 +74,6 @@ const CameraPopup = ({ onClose, generateChatbotResponse, appendMessage }) => {
         const img_path = canvas.toDataURL('image/jpg');
         setImageSrc(img_path);
     }
-
-    // if (canvas) {
-    //     const context = canvas.getContext('2d');
-    //     context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
-  
-    //     const imageSrcData = canvas.toDataURL('image/png');
-        
-    //     // Send the captured image to the API for text recognition
-    //     try {
-    //       const response = await axios.post('https://demo.botaiml.com/card-ocr/image-ocr-extraction', {
-    //         image: imageSrcData,
-    //       });
-  
-    //       // Extract text from the API response
-    //       const recognizedText = response.data.text;
-  
-    //       // Pass the recognized text to your chatbot logic
-    //       const responseMessage = generateChatbotResponse(recognizedText);
-  
-    //       // Update messages state
-    //       appendMessage('chatbot', responseMessage);
-  
-    //       setImageSrc(imageSrcData); // Show captured image
-    //     } catch (error) {
-    //       console.error('Error processing image:', error);
-    //     }
-    //   }
   };
 
   const handleSendToAPI = async () => {
@@ -113,7 +86,7 @@ const CameraPopup = ({ onClose, generateChatbotResponse, appendMessage }) => {
 
       const img_path = canvas.toDataURL('image/jpg');
 
-      const imgBlob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpg')); // Change to JPEG format
+      const imgBlob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpg')); // Change to JPG format
 
       const formData = new FormData();
       formData.append('img_path', imgBlob, 'img_path.jpg'); // Assuming the API expects 'img_path' as the key

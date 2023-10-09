@@ -1,42 +1,52 @@
 // MicrophonePopup.js
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const MicrophonePopup = ({ onClose, onSave }) => {
   const [isRecording, setIsRecording] = useState(false);
+  const [mediaRecorder, setMediaRecorder] = useState(null);
   const [audioChunks, setAudioChunks] = useState([]);
-  let mediaRecorder;
 
-  const handleRecordClick = () => {
+  useEffect(() => {
     if (isRecording) {
-      mediaRecorder.stop();
-      setIsRecording(false);
-    } else {
       navigator.mediaDevices.getUserMedia({ audio: true })
         .then((stream) => {
-          mediaRecorder = new MediaRecorder(stream);
-          mediaRecorder.ondataavailable = (e) => {
+          const recorder = new MediaRecorder(stream);
+          recorder.ondataavailable = (e) => {
             setAudioChunks([...audioChunks, e.data]);
           };
-          mediaRecorder.onstop = () => {
+          recorder.onstop = () => {
             const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
             onSave(audioBlob);
             setAudioChunks([]);
           };
-          mediaRecorder.start();
-          setIsRecording(true);
+          setMediaRecorder(recorder);
+          recorder.start();
         })
         .catch((error) => {
           console.error('Error accessing the microphone:', error);
         });
     }
-  }
+  }, [isRecording]);
+
+  const handleRecordClick = () => {
+    setIsRecording(!isRecording);
+    if (mediaRecorder) {
+      if (isRecording) {
+        mediaRecorder.stop();
+      } else {
+        mediaRecorder.start();
+      }
+    }
+  };
 
   return (
     <div className="microphone-popup">
-      <div className="popup-content">
-        {isRecording ? <button onClick={handleRecordClick}>Stop Recording</button> : <button onClick={handleRecordClick}>Start Recording</button>}
-        <button onClick={onClose}>Close</button>
+      <div className="popup-card">
+        <div className="popup-content">
+          {isRecording ? <button onClick={handleRecordClick}>Stop Recording</button> : <button onClick={handleRecordClick}>Start Recording</button>}
+          <button onClick={onClose}>Close</button>
+        </div>
       </div>
     </div>
   );
