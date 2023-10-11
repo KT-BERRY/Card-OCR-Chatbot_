@@ -27,7 +27,7 @@ const MicrophonePopup = ({ onClose, onSave }) => {
           console.error('Error accessing the microphone:', error);
         });
     }
-  }, [isRecording]);
+  }, [isRecording, audioChunks, onSave]);
 
   const handleRecordClick = () => {
     setIsRecording(!isRecording);
@@ -40,11 +40,21 @@ const MicrophonePopup = ({ onClose, onSave }) => {
     }
   };
 
+  const handleSaveClick = () => {
+    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+    const url = URL.createObjectURL(audioBlob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'recorded_audio.wav';
+    a.click();
+  };
+
   return (
     <div className="microphone-popup">
       <div className="popup-card">
         <div className="popup-content">
           {isRecording ? <button onClick={handleRecordClick}>Stop Recording</button> : <button onClick={handleRecordClick}>Start Recording</button>}
+          <button onClick={handleSaveClick} disabled={!audioChunks.length}>Save Audio</button>
           <button onClick={onClose}>Close</button>
         </div>
       </div>
