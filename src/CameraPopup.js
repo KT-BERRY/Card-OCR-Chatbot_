@@ -100,16 +100,48 @@ const CameraPopup = ({ onClose, generateChatbotResponse, appendMessage }) => {
         const recognizedTextMessage = recognizedTextArray.map((item, index) => (
           <div key={index}>{item}</div>
         ));
+
+        // const extractedDataArray = response.data;
+
+      // if (extractedDataArray.length > 0) {
+      //   const extractedData = extractedDataArray[0];
+
+      //   // Define regular expressions for email and phone number
+      //   const emailRegex = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b/;
+      //   const phoneRegex = /\b\d{10}\b/;
+
+      //   // Extract email and phone number using regular expressions
+      //   const emailMatch = extractedData.match(emailRegex);
+      //   const phoneMatch = extractedData.match(phoneRegex);
+
+      //   // Check if both email and phone number were found
+      //   if (emailMatch && phoneMatch) {
+      //     const name = extractedData.replace(emailMatch[0], '').replace(phoneMatch[0], '').trim();
+
+      //     // const recognizedTextMessage = (
+      //     //   <div>
+      //     //     <div>Name: {name}</div>
+      //     //     <div>Email: {emailMatch[0]}</div>
+      //     //     <div>Phone: {phoneMatch[0]}</div>
+      //     //   </div>
+      //     // );
         
         appendMessage('chatbot', recognizedTextMessage);
+        
+    //   } else {
+    //     console.error('Email or phone number not found in the API response');
+    //   }
+    // } else {
+    //   console.error('No data found in the API response');
+    // }
     
-        // setImageSrc(img_path); // Show captured image
+    // setImageSrc(img_path); // Show captured image
 
-        onClose();
+    onClose();
 
-      } catch (error) {
-        console.error('Error processing image:', error);
-      }
+    } catch (error) {
+      console.error('Error processing image:', error);
+    }
     }
   }
 
