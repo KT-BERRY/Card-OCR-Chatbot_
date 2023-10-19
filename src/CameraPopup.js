@@ -81,12 +81,13 @@ const CameraPopup = ({ onClose, generateChatbotResponse, appendMessage }) => {
     // const videoRef = useRef(null);
 
     if (canvas) {
-      const img_path = canvas.toDataURL('image/jpg');
+      // const img_path = canvas.toDataURL('image/jpg');
 
       const imgBlob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpg')); // Change to JPG format
 
       const formData = new FormData();
-      formData.append('img_path', imgBlob, 'img_path.jpg'); // Assuming the API expects 'img_path' as the key
+      // formData.append('img_path', imgBlob, 'img_path.jpg'); // Assuming the API expects 'img_path' as the key
+      formData.append('img_path', new File([imgBlob], 'captured_image.jpg', { type: 'image/jpeg' })); // Added File object
 
       try {
         const response = await axios.post('https://demo.botaiml.com/card-ocr/image-ocr-extraction', formData, {
@@ -95,45 +96,46 @@ const CameraPopup = ({ onClose, generateChatbotResponse, appendMessage }) => {
           },
           // img_path: img_path
         });
-        
-        const recognizedTextArray = response.data;
-        const recognizedTextMessage = recognizedTextArray.map((item, index) => (
-          <div key={index}>{item}</div>
-        ));
+        console.log(response.data);
 
-        // const extractedDataArray = response.data;
+        // const recognizedTextArray = response.data;
+        // const recognizedTextMessage = recognizedTextArray.map((item, index) => (
+        //   <div key={index}>{item}</div>
+        // ));
 
-      // if (extractedDataArray.length > 0) {
-      //   const extractedData = extractedDataArray[0];
+        const extractedDataArray = response.data;
 
-      //   // Define regular expressions for email and phone number
-      //   const emailRegex = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b/;
-      //   const phoneRegex = /\b\d{10}\b/;
+      if (extractedDataArray.length > 0) {
+        const extractedData = extractedDataArray[0];
 
-      //   // Extract email and phone number using regular expressions
-      //   const emailMatch = extractedData.match(emailRegex);
-      //   const phoneMatch = extractedData.match(phoneRegex);
+        // Define regular expressions for email and phone number
+        const emailRegex = /\b^\S+@\S+$\b/;
+        const phoneRegex = /\b\d{10}\b/;
 
-      //   // Check if both email and phone number were found
-      //   if (emailMatch && phoneMatch) {
-      //     const name = extractedData.replace(emailMatch[0], '').replace(phoneMatch[0], '').trim();
+        // Extract email and phone number using regular expressions
+        const emailMatch = extractedData.match(emailRegex);
+        const phoneMatch = extractedData.match(phoneRegex);
 
-      //     // const recognizedTextMessage = (
-      //     //   <div>
-      //     //     <div>Name: {name}</div>
-      //     //     <div>Email: {emailMatch[0]}</div>
-      //     //     <div>Phone: {phoneMatch[0]}</div>
-      //     //   </div>
-      //     // );
+        // Check if both email and phone number were found
+        if (emailMatch && phoneMatch) {
+          const name = extractedData.replace(emailMatch[0], '').replace(phoneMatch[0], '').trim();
+
+          const recognizedTextMessage = (
+            <div>
+              <div>Name: {name}</div>
+              <div>Email: {emailMatch[0]}</div>
+              <div>Phone: {phoneMatch[0]}</div>
+            </div>
+          );
         
         appendMessage('chatbot', recognizedTextMessage);
         
-    //   } else {
-    //     console.error('Email or phone number not found in the API response');
-    //   }
-    // } else {
-    //   console.error('No data found in the API response');
-    // }
+      } else {
+        console.error('Email or phone number not found in the API response');
+      }
+    } else {
+      console.error('No data found in the API response');
+    }
     
     // setImageSrc(img_path); // Show captured image
 

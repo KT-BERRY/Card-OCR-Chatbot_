@@ -50,35 +50,35 @@ function ChatBox() {
     const [audioChunks, setAudioChunks] = useState([]);
     const [isRecording, setIsRecording] = useState(false);
 
-    const handleMicClick = () => {
-        if (!mediaRecorder) {
-            navigator.mediaDevices.getUserMedia({ audio: true })
-                .then((stream) => {
-                    const recorder = new MediaRecorder(stream);
-                    recorder.ondataavailable = (e) => {
-                        setAudioChunks([...audioChunks, e.data]);
-                    };
-                    recorder.onstop = () => {
-                        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-                        const audioUrl = URL.createObjectURL(audioBlob);
-                        appendMessage('user', `<audio controls src="${audioUrl}"/>`);
-                        setAudioChunks([]);
-                    };
-                    setMediaRecorder(recorder);
-                })
-                .catch((error) => {
-                    console.error('Error accessing the microphone:', error);
-                });
-        }
+    // const handleMicClick = () => {
+    //     if (!mediaRecorder) {
+    //         navigator.mediaDevices.getUserMedia({ audio: true })
+    //             .then((stream) => {
+    //                 const recorder = new MediaRecorder(stream);
+    //                 recorder.ondataavailable = (e) => {
+    //                     setAudioChunks([...audioChunks, e.data]);
+    //                 };
+    //                 recorder.onstop = () => {
+    //                     const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+    //                     const audioUrl = URL.createObjectURL(audioBlob);
+    //                     appendMessage('user', `<audio controls src="${audioUrl}"/>`);
+    //                     setAudioChunks([]);
+    //                 };
+    //                 setMediaRecorder(recorder);
+    //             })
+    //             .catch((error) => {
+    //                 console.error('Error accessing the microphone:', error);
+    //             });
+    //     }
 
-        if (mediaRecorder && !isRecording) {
-            mediaRecorder.start();
-            setIsRecording(true);
-        } else if (mediaRecorder && isRecording) {
-            mediaRecorder.stop();
-            setIsRecording(false);
-        }
-    }
+    //     if (mediaRecorder && !isRecording) {
+    //         mediaRecorder.start();
+    //         setIsRecording(true);
+    //     } else if (mediaRecorder && isRecording) {
+    //         mediaRecorder.stop();
+    //         setIsRecording(false);
+    //     }
+    // }
 
     const [showMicrophonePopup, setShowMicrophonePopup] = useState(false);
 
