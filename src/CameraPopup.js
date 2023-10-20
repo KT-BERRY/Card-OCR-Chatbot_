@@ -110,7 +110,7 @@ const CameraPopup = ({ onClose, generateChatbotResponse, appendMessage }) => {
 
         // Define regular expressions for email and phone number
         const emailRegex = /\b^\S+@\S+$\b/;
-        const phoneRegex = /\b\d{10}\b/;
+        const phoneRegex = /\d{10}$b/;
 
         // Extract email and phone number using regular expressions
         const emailMatch = extractedData.match(emailRegex);

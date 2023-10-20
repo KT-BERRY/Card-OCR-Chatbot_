@@ -139,6 +139,7 @@ footer {
     border-top: 2px solid #000000;
     /* justify-content: baseline; */
     margin-top: 35%;
+    /* position: sticky; */
 }
 
 .dialect-box {
