@@ -8,6 +8,7 @@ const CameraPopup = ({ onClose, generateChatbotResponse, appendMessage }) => {
 
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
+    console.log('Selected File:', file);
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
@@ -20,7 +21,7 @@ const CameraPopup = ({ onClose, generateChatbotResponse, appendMessage }) => {
   const handleUploadButtonClick = () => {
     document.getElementById('file-input').click();
   };
-
+  
   useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
@@ -92,6 +93,7 @@ const CameraPopup = ({ onClose, generateChatbotResponse, appendMessage }) => {
       try {
         const response = await axios.post('https://demo.botaiml.com/card-ocr/image-ocr-extraction', formData, {
           headers: {
+            'accept': 'application/json',
             'Content-Type': 'multipart/form-data'
           },
           // img_path: img_path
@@ -109,29 +111,29 @@ const CameraPopup = ({ onClose, generateChatbotResponse, appendMessage }) => {
         const extractedData = extractedDataArray[0];
 
         // Define regular expressions for email and phone number
-        const emailRegex = /\b^\S+@\S+$\b/;
-        const phoneRegex = /\d{10}$b/;
+        const emailRegex = /\b^\S+@\S+.com\S+.co\S+.in\S+b/;
+        // const phoneRegex = /\d{10}$b/;
 
         // Extract email and phone number using regular expressions
         const emailMatch = extractedData.match(emailRegex);
-        const phoneMatch = extractedData.match(phoneRegex);
+        // const phoneMatch = extractedData.match(phoneRegex);
 
         // Check if both email and phone number were found
-        if (emailMatch && phoneMatch) {
-          const name = extractedData.replace(emailMatch[0], '').replace(phoneMatch[0], '').trim();
+        if (emailMatch) {
+          const name = extractedData.replace(emailMatch[0], '').trim();
 
           const recognizedTextMessage = (
             <div>
               <div>Name: {name}</div>
               <div>Email: {emailMatch[0]}</div>
-              <div>Phone: {phoneMatch[0]}</div>
+              {/* <div>Phone: {phoneMatch[0]}</div> */}
             </div>
           );
         
         appendMessage('chatbot', recognizedTextMessage);
         
       } else {
-        console.error('Email or phone number not found in the API response');
+        console.error('Email not found in the API response');
       }
     } else {
       console.error('No data found in the API response');
