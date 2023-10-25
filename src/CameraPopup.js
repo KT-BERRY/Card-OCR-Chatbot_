@@ -107,39 +107,27 @@ const CameraPopup = ({ onClose, generateChatbotResponse, appendMessage }) => {
 
         const extractedDataArray = response.data;
 
-      if (extractedDataArray.length > 0) {
-        const extractedData = extractedDataArray[0];
+        let email;
 
-        // Define regular expressions for email and phone number
-        const emailRegex = /\b^\S+@\S+.com\S+.co\S+.in\S+b/;
-        // const phoneRegex = /\d{10}$b/;
+        for (let item of extractedDataArray) {
+          if (item.includes('@')) {
+            email = item;
+            break;
+          }
+        }
 
-        // Extract email and phone number using regular expressions
-        const emailMatch = extractedData.match(emailRegex);
-        // const phoneMatch = extractedData.match(phoneRegex);
-
-        // Check if both email and phone number were found
-        if (emailMatch) {
-          const name = extractedData.replace(emailMatch[0], '').trim();
-
+        if (email) {
           const recognizedTextMessage = (
             <div>
-              <div>Name: {name}</div>
-              <div>Email: {emailMatch[0]}</div>
-              {/* <div>Phone: {phoneMatch[0]}</div> */}
+              <div>{email}</div>
             </div>
           );
+
+          appendMessage('chatbot', recognizedTextMessage);
+        } else {
+          console.error('Email not found in the API response');
+        }
         
-        appendMessage('chatbot', recognizedTextMessage);
-        
-      } else {
-        console.error('Email not found in the API response');
-      }
-    } else {
-      console.error('No data found in the API response');
-    }
-    
-    // setImageSrc(img_path); // Show captured image
 
     onClose();
 
