@@ -77,6 +77,31 @@ const CameraPopup = ({ onClose, generateChatbotResponse, appendMessage }) => {
     }
   };
 
+  const [isEmailCorrect, setIsEmailCorrect] = useState(true);
+  const [userProvidedEmail, setUserProvidedEmail] = useState('');
+
+  const handleYesButtonClick = () => {
+    setIsEmailCorrect(true);
+  };
+
+  const handleNoButtonClick = () => {
+    setIsEmailCorrect(false);
+  };
+
+  const handleManualEmailInput = (event) => {
+    setUserProvidedEmail(event.target.value);
+  };
+
+  const handleManualEmailSubmit = () => {
+    const recognizedTextMessage = (
+      <div>
+        <div>Email: {userProvidedEmail}</div>
+      </div>
+    );
+    appendMessage('chatbot', recognizedTextMessage);
+    onClose();
+  };
+
   const handleSendToAPI = async () => {
     const canvas = canvasRef.current;
     // const videoRef = useRef(null);
@@ -100,11 +125,6 @@ const CameraPopup = ({ onClose, generateChatbotResponse, appendMessage }) => {
         });
         console.log(response.data);
 
-        // const recognizedTextArray = response.data;
-        // const recognizedTextMessage = recognizedTextArray.map((item, index) => (
-        //   <div key={index}>{item}</div>
-        // ));
-
         const extractedDataArray = response.data;
 
         let email;
@@ -120,10 +140,31 @@ const CameraPopup = ({ onClose, generateChatbotResponse, appendMessage }) => {
           const recognizedTextMessage = (
             <div>
               <div>{email}</div>
-            </div>
-          );
+              {!isEmailCorrect && (
+                <>
+                  <button onClick={handleYesButtonClick}>Yes</button>
+                  {/* <button onClick={handleNoButtonClick}>No</button> */}
+                </>
+              )}
+              </div>
+            );
 
           appendMessage('chatbot', recognizedTextMessage);
+
+          if (!isEmailCorrect && userProvidedEmail) {
+            const manualEmailInput = (
+              <div>
+                <input
+                  type="text"
+                  value={userProvidedEmail}
+                  onChange={handleManualEmailInput}
+                />
+                <button onClick={handleManualEmailSubmit}>Submit</button>
+              </div>
+            );
+    
+            appendMessage('chatbot', manualEmailInput);
+          }    
         } else {
           appendMessage('chatbot', 'Email not found in the API response');
         }
@@ -147,7 +188,7 @@ const CameraPopup = ({ onClose, generateChatbotResponse, appendMessage }) => {
     }
   };
 
-  useEffect(() => {
+  useEffect(() => { 
     startCamera();
   }, []);
 
