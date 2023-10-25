@@ -125,7 +125,7 @@ const CameraPopup = ({ onClose, generateChatbotResponse, appendMessage }) => {
 
           appendMessage('chatbot', recognizedTextMessage);
         } else {
-          console.error('Email not found in the API response');
+          appendMessage('chatbot', 'Email not found in the API response');
         }
     
     onClose();
