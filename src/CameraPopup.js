@@ -77,30 +77,39 @@ const CameraPopup = ({ onClose, generateChatbotResponse, appendMessage }) => {
     }
   };
 
-  const [isEmailCorrect, setIsEmailCorrect] = useState(true);
-  const [userProvidedEmail, setUserProvidedEmail] = useState('');
+  // const sendEmail = async (to) => {
+  //   const from = 'mohantyabhishek101203@gmail.com';
+  //   const subject = 'Test mail';
+  //   const body = 'Body of the email';
+  
+  //   try {
+  //     await axios.post('http://localhost:3001/send-email', { from, to, subject, body });
+  //     console.log('Email sent successfully');
+  //   } catch (error) {
+  //     console.error('Error sending email:', error);
+  //   }
+  // };
 
-  const handleYesButtonClick = () => {
-    setIsEmailCorrect(true);
+  const sendEmail = async (from, to, subject, body) => {
+    try {
+      await axios.post('http://localhost:3001/send-email', { from, to, subject, body });
+      console.log('Email sent successfully');
+    } catch (error) {
+      console.error('Error sending email:', error);
+    }
   };
-
-  const handleNoButtonClick = () => {
-    setIsEmailCorrect(false);
+  
+  const handleSendEmail = async () => {
+    const extractedEmail = 'example@example.com'; // Replace with the actual extracted email
+  
+    // Check if the email is valid (add your own validation logic here)
+    if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(extractedEmail)) {
+      await sendEmail(extractedEmail);
+    } else {
+      console.error('Invalid email address');
+    }
   };
-
-  const handleManualEmailInput = (event) => {
-    setUserProvidedEmail(event.target.value);
-  };
-
-  const handleManualEmailSubmit = () => {
-    const recognizedTextMessage = (
-      <div>
-        <div>Email: {userProvidedEmail}</div>
-      </div>
-    );
-    appendMessage('chatbot', recognizedTextMessage);
-    onClose();
-  };
+  
 
   const handleSendToAPI = async () => {
     const canvas = canvasRef.current;
@@ -138,33 +147,27 @@ const CameraPopup = ({ onClose, generateChatbotResponse, appendMessage }) => {
 
         if (email) {
           const recognizedTextMessage = (
-            <div>
               <div>{email}</div>
-              {!isEmailCorrect && (
-                <>
-                  <button onClick={handleYesButtonClick}>Yes</button>
-                  {/* <button onClick={handleNoButtonClick}>No</button> */}
-                </>
-              )}
-              </div>
             );
 
           appendMessage('chatbot', recognizedTextMessage);
 
-          if (!isEmailCorrect && userProvidedEmail) {
-            const manualEmailInput = (
-              <div>
-                <input
-                  type="text"
-                  value={userProvidedEmail}
-                  onChange={handleManualEmailInput}
-                />
-                <button onClick={handleManualEmailSubmit}>Submit</button>
-              </div>
-            );
-    
-            appendMessage('chatbot', manualEmailInput);
-          }    
+          await handleSendEmail();
+
+          // if (!isEmailCorrect && userProvidedEmail) {
+          //   const manualEmailInput = (
+          //     <div>
+          //       <input
+          //         type="text"
+          //         value={userProvidedEmail}
+          //         // onChange={handleManualEmailInput}
+          //       />
+          //       {/* <button onClick={handleManualEmailSubmit}>Submit</button> */}
+          //     </div>
+          //   );
+            
+            // appendMessage('chatbot', manualEmailInput);
+          // }    
         } else {
           appendMessage('chatbot', 'Email not found in the API response');
         }

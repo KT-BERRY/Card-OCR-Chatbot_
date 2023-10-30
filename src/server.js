@@ -1,33 +1,36 @@
 const express = require('express');
 const nodemailer = require('nodemailer');
 const app = express();
+const cors = require('cors');
 
+app.use(cors());
 app.use(express.json());
 
-app.post('/send-email', (req, res) => {
-  const { to, subject, body } = req.body;
+app.post('/send-email', async (req, res) => {
+  const { from, to, subject, body } = req.body;
 
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'email@gmail.com',
-      pass: 'password',
+      user: 'mohantyabhishek101203@gmail.com',
+      pass: 'GmailKT@8apr',
     },
   });
 
   const mailOptions = {
-    from: 'your-email@gmail.com',
+    from,
     to,
     subject,
     text: body,
   };
 
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      return res.status(500).send(error.toString());
-    }
-    res.status(200).send('Email sent: ' + info.response);
-  });
+  try {
+    await transporter.sendMail(mailOptions);
+    res.status(200).send('Email sent successfully');
+  } catch (error) {
+    console.error('Error sending email:', error);
+    res.status(500).send('Error sending email');
+  }
 });
 
 app.listen(3001, () => {
