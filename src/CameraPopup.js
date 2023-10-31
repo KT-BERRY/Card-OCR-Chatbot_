@@ -77,52 +77,38 @@ const CameraPopup = ({ onClose, generateChatbotResponse, appendMessage }) => {
     }
   };
 
-  // const sendEmail = async (to) => {
-  //   const from = 'mohantyabhishek101203@gmail.com';
-  //   const subject = 'Test mail';
-  //   const body = 'Body of the email';
-  
-  //   try {
-  //     await axios.post('http://localhost:3001/send-email', { from, to, subject, body });
-  //     console.log('Email sent successfully');
-  //   } catch (error) {
-  //     console.error('Error sending email:', error);
-  //   }
+  const [isEmailCorrect, setIsEmailCorrect] = useState(true);
+  const [userProvidedEmail, setUserProvidedEmail] = useState('');
+
+  // const handleYesButtonClick = () => {
+  //   setIsEmailCorrect(true);
   // };
 
-  const sendEmail = async (from, to, subject, body) => {
-    try {
-      await axios.post('http://localhost:3001/send-email', { from, to, subject, body });
-      console.log('Email sent successfully');
-    } catch (error) {
-      console.error('Error sending email:', error);
-    }
-  };
-  
-  const handleSendEmail = async () => {
-    const extractedEmail = 'example@example.com'; // Replace with the actual extracted email
-  
-    // Check if the email is valid (add your own validation logic here)
-    if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(extractedEmail)) {
-      await sendEmail(extractedEmail);
-    } else {
-      console.error('Invalid email address');
-    }
-  };
-  
+  // const handleNoButtonClick = () => {
+  //   setIsEmailCorrect(false);
+  // };
+
+  // const handleManualEmailInput = (event) => {
+  //   setUserProvidedEmail(event.target.value);
+  // };
+
+  // const handleManualEmailSubmit = () => {
+  //   const recognizedTextMessage = (
+  //     <div>
+  //       <div>Email: {userProvidedEmail}</div>
+  //     </div>
+  //   );
+  //   appendMessage('chatbot', recognizedTextMessage);
+  //   onClose();
+  // };
 
   const handleSendToAPI = async () => {
     const canvas = canvasRef.current;
-    // const videoRef = useRef(null);
 
     if (canvas) {
-      // const img_path = canvas.toDataURL('image/jpg');
-
-      const imgBlob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpg')); // Change to JPG format
-
+      const imgBlob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpg'));
       const formData = new FormData();
-      // formData.append('img_path', imgBlob, 'img_path.jpg'); // Assuming the API expects 'img_path' as the key
-      formData.append('img_path', new File([imgBlob], 'captured_image.jpg', { type: 'image/jpeg' })); // Added File object
+      formData.append('img_path', new File([imgBlob], 'captured_image.jpg', { type: 'image/jpeg' }));
 
       try {
         const response = await axios.post('https://demo.botaiml.com/card-ocr/image-ocr-extraction', formData, {
@@ -130,9 +116,7 @@ const CameraPopup = ({ onClose, generateChatbotResponse, appendMessage }) => {
             'accept': 'application/json',
             'Content-Type': 'multipart/form-data'
           },
-          // img_path: img_path
         });
-        console.log(response.data);
 
         const extractedDataArray = response.data;
 
@@ -147,39 +131,47 @@ const CameraPopup = ({ onClose, generateChatbotResponse, appendMessage }) => {
 
         if (email) {
           const recognizedTextMessage = (
+            <div>
               <div>{email}</div>
-            );
+            </div>
+          );
 
           appendMessage('chatbot', recognizedTextMessage);
-
-          await handleSendEmail();
-
-          // if (!isEmailCorrect && userProvidedEmail) {
-          //   const manualEmailInput = (
-          //     <div>
-          //       <input
-          //         type="text"
-          //         value={userProvidedEmail}
-          //         // onChange={handleManualEmailInput}
-          //       />
-          //       {/* <button onClick={handleManualEmailSubmit}>Submit</button> */}
-          //     </div>
-          //   );
-            
-            // appendMessage('chatbot', manualEmailInput);
-          // }    
         } else {
           appendMessage('chatbot', 'Email not found in the API response');
         }
-    
-    onClose();
 
-    } catch (error) {
-      console.error('Error processing image:', error);
-    }
+        onClose();
+      } catch (error) {
+        console.error('Error processing image:', error);
+      }
     }
   }
 
+  const handleSendEmail = async () => {
+    const from = 'mohantyabhishek101203@gmail.com'; // Set a default value or fetch from elsewhere
+    const subject = 'Test mail'; // Set a default value or fetch from elsewhere
+    const body = 'Body of the email'; // Set a default value or fetch from elsewhere
+  
+    // Check if the email is valid (add your own validation logic here)
+    if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(from)) {
+      await sendEmail(from, subject, body);
+    } else {
+      console.error('Invalid email address');
+    }
+  };
+  
+  const sendEmail = async (from, subject, body) => {
+    const to = 'abhishek080403@gmail.com'; // Set a default value or fetch from elsewhere
+  
+    try {
+      await axios.post('http://localhost:3001/send-email', { from, to, subject, body });
+      console.log('Email sent successfully');
+    } catch (error) {
+      console.error('Error sending email:', error);
+    }
+  };
+  
   const startCamera = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -190,14 +182,14 @@ const CameraPopup = ({ onClose, generateChatbotResponse, appendMessage }) => {
       console.error('Error accessing the camera:', error);
     }
   };
-
+  
   useEffect(() => { 
     startCamera();
   }, []);
 
   const handleRetakeImage = () => {
     setImageSrc(null);
-    startCamera();
+    startCamera();  
   };
 
   const handleSaveImage = () => {
@@ -217,7 +209,8 @@ const CameraPopup = ({ onClose, generateChatbotResponse, appendMessage }) => {
             <img src={imageSrc} alt="Captured" style={{ maxWidth: '100%', height: 'auto' }}/>
             <button onClick={handleSaveImage}>Save</button>
             <button onClick={handleRetakeImage}>Retake</button>
-            <button onClick={handleSendToAPI}>Send</button> 
+            <button onClick={handleSendToAPI}>Send</button>
+            <button onClick={handleSendEmail}>Send Email</button>
           </>
         ) : (
           <video ref={videoRef} autoPlay playsInline />
