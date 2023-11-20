@@ -1,19 +1,22 @@
-const express = require('express');
-const nodemailer = require('nodemailer');
+import express from 'express';
+import { createTransport } from 'nodemailer';
+import cors from 'cors';
+
 const app = express();
-const cors = require('cors');
+const port = 3001;
 
 app.use(cors());
 app.use(express.json());
 
+// Email sending endpoint
 app.post('/send-email', async (req, res) => {
   const { from, to, subject, body } = req.body;
 
-  const transporter = nodemailer.createTransport({
+  const transporter = createTransport({
     service: 'gmail',
     auth: {
-      user: 'mohantyabhishek101203@gmail.com',
-      pass: 'GmailKT@8apr',
+      user: 'botaiml123@gmail.com', // Replace with your Gmail address
+      pass: 'bot_KT@123',      // Replace with your Gmail password or generate an app-specific password
     },
   });
 
@@ -26,6 +29,7 @@ app.post('/send-email', async (req, res) => {
 
   try {
     await transporter.sendMail(mailOptions);
+    console.log('Email sent successfully');
     res.status(200).send('Email sent successfully');
   } catch (error) {
     console.error('Error sending email:', error);
@@ -33,6 +37,6 @@ app.post('/send-email', async (req, res) => {
   }
 });
 
-app.listen(3001, () => {
-  console.log('Server is running on http://localhost:3001');
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
 });

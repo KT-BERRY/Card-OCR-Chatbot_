@@ -80,28 +80,6 @@ const CameraPopup = ({ onClose, generateChatbotResponse, appendMessage }) => {
   const [isEmailCorrect, setIsEmailCorrect] = useState(true);
   const [userProvidedEmail, setUserProvidedEmail] = useState('');
 
-  // const handleYesButtonClick = () => {
-  //   setIsEmailCorrect(true);
-  // };
-
-  // const handleNoButtonClick = () => {
-  //   setIsEmailCorrect(false);
-  // };
-
-  // const handleManualEmailInput = (event) => {
-  //   setUserProvidedEmail(event.target.value);
-  // };
-
-  // const handleManualEmailSubmit = () => {
-  //   const recognizedTextMessage = (
-  //     <div>
-  //       <div>Email: {userProvidedEmail}</div>
-  //     </div>
-  //   );
-  //   appendMessage('chatbot', recognizedTextMessage);
-  //   onClose();
-  // };
-
   const handleSendToAPI = async () => {
     const canvas = canvasRef.current;
 
@@ -163,7 +141,7 @@ const CameraPopup = ({ onClose, generateChatbotResponse, appendMessage }) => {
   
   const sendEmail = async (from, subject, body) => {
     const to = 'abhishek080403@gmail.com'; // Set a default value or fetch from elsewhere
-  
+    
     try {
       await axios.post('http://localhost:3001/send-email', { from, to, subject, body });
       console.log('Email sent successfully');
@@ -210,7 +188,7 @@ const CameraPopup = ({ onClose, generateChatbotResponse, appendMessage }) => {
             <button onClick={handleSaveImage}>Save</button>
             <button onClick={handleRetakeImage}>Retake</button>
             <button onClick={handleSendToAPI}>Send</button>
-            <button onClick={handleSendEmail}>Send Email</button>
+            {/* <button onClick={handleSendEmail}>Send Email</button> */}
           </>
         ) : (
           <video ref={videoRef} autoPlay playsInline />

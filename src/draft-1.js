@@ -5,15 +5,21 @@ import MicrophonePopup from './MicrophonePopup';
 import MicNoneOutlinedIcon from '@mui/icons-material/MicNoneOutlined';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import SendIcon from '@mui/icons-material/Send';
+import SendEmailButton from './SendEmailButton';
+import EmailIcon from '@mui/icons-material/Email';
 
 function ChatBox() {
     const [messages, setMessages] = useState([{ sender: 'chatbot', message: 'Welcome, How may I help you?' }]);
     const [inputText, setInputText] = useState('');
+    const [userEmail, setUserEmail] = useState('');
 
-    const appendMessage = (sender, message, delay) => {
+    const appendMessage = (sender, message, userEmail) => {
         setMessages(prevMessages => [...prevMessages, { sender, message }]);
-    }
-
+        if (userEmail) {
+          setUserEmail(userEmail);
+        }
+    };
+      
     const sendMessage = () => {
         const message = inputText.trim();
 
@@ -44,41 +50,15 @@ function ChatBox() {
         setShowCameraPopup(false);
     }
 
+    const handleUserEmailChange = (event) => {
+        setUserEmail(event.target.value);
+    };
+
     const [showCameraPopup, setShowCameraPopup] = useState(false);
 
     const [mediaRecorder, setMediaRecorder] = useState(null);
     const [audioChunks, setAudioChunks] = useState([]);
     const [isRecording, setIsRecording] = useState(false);
-
-    // const handleMicClick = () => {
-    //     if (!mediaRecorder) {
-    //         navigator.mediaDevices.getUserMedia({ audio: true })
-    //             .then((stream) => {
-    //                 const recorder = new MediaRecorder(stream);
-    //                 recorder.ondataavailable = (e) => {
-    //                     setAudioChunks([...audioChunks, e.data]);
-    //                 };
-    //                 recorder.onstop = () => {
-    //                     const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-    //                     const audioUrl = URL.createObjectURL(audioBlob);
-    //                     appendMessage('user', `<audio controls src="${audioUrl}"/>`);
-    //                     setAudioChunks([]);
-    //                 };
-    //                 setMediaRecorder(recorder);
-    //             })
-    //             .catch((error) => {
-    //                 console.error('Error accessing the microphone:', error);
-    //             });
-    //     }
-
-    //     if (mediaRecorder && !isRecording) {
-    //         mediaRecorder.start();
-    //         setIsRecording(true);
-    //     } else if (mediaRecorder && isRecording) {
-    //         mediaRecorder.stop();
-    //         setIsRecording(false);
-    //     }
-    // }
 
     const [showMicrophonePopup, setShowMicrophonePopup] = useState(false);
 
@@ -113,9 +93,8 @@ function ChatBox() {
     }
 
     const giveResponse = (userMessage) => {
-        return 'Hi';
+        return userMessage;
     }
-
 
     return (
         <div>
@@ -166,8 +145,9 @@ function ChatBox() {
                     appendMessage={appendMessage}
                 />
                 )}
+                <button id="send-email-button" onClick={sendMessage}><EmailIcon style={{ fontSize: '20px' }} /></button>
                 </div>
-
+                
                 <div className="dialect-box" id="dialect-box">
                     {/* Content for dialect box */}
                 </div>
