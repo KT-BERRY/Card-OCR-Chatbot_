@@ -127,7 +127,7 @@ const CameraPopup = ({ onClose, generateChatbotResponse, appendMessage }) => {
   }
 
   const handleSendEmail = async () => {
-    const from = 'mohantyabhishek101203@gmail.com'; // Set a default value or fetch from elsewhere
+    const from = 'botaiml123@gmail.com'; // Set a default value or fetch from elsewhere
     const subject = 'Test mail'; // Set a default value or fetch from elsewhere
     const body = 'Body of the email'; // Set a default value or fetch from elsewhere
   

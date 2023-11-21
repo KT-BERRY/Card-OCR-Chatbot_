@@ -10,13 +10,15 @@ app.use(express.json());
 
 // Email sending endpoint
 app.post('/send-email', async (req, res) => {
+  console.log('Received email request:', req.body);
+
   const { from, to, subject, body } = req.body;
 
   const transporter = createTransport({
     service: 'gmail',
     auth: {
-      user: 'botaiml123@gmail.com', // Replace with your Gmail address
-      pass: 'bot_KT@123',      // Replace with your Gmail password or generate an app-specific password
+      user: 'botaiml123@gmail.com',
+      pass: 'bot_KT@123',
     },
   });
 
@@ -38,5 +40,5 @@ app.post('/send-email', async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+  console.log('Server is running on http://localhost:3001');
 });

@@ -96,6 +96,11 @@ function ChatBox() {
         return userMessage;
     }
 
+    const handleSendEmail = () => {
+        // Add any logic you need when the email is sent
+        console.log('Email sent from ChatBox!');
+    };
+
     return (
         <div>
             <header>
@@ -134,6 +139,8 @@ function ChatBox() {
                         {isRecording ? <span>Stop Recording</span> : <MicNoneOutlinedIcon style={{ fontSize: '20px' }} />}</button>
                         <button id="camera-button" onClick={handleCameraClick}><CameraAltIcon style={{ fontSize: '20px' }} /></button>
                         <button id="send-button" enabled="true" onClick={sendMessage}><SendIcon style={{ fontSize: '20px' }} /></button>
+                        {/* <button id="send-email-button" onClick={sendMessage}><EmailIcon style={{ fontSize: '20px' }} /></button> */}
+                        <SendEmailButton userEmail={userEmail} onSendEmail={handleSendEmail} />
                     </div>
                     {showMicrophonePopup && (
                     <MicrophonePopup onClose={handleCloseMicrophone} onSave={handleSaveAudio} />
@@ -145,7 +152,7 @@ function ChatBox() {
                     appendMessage={appendMessage}
                 />
                 )}
-                <button id="send-email-button" onClick={sendMessage}><EmailIcon style={{ fontSize: '20px' }} /></button>
+                
                 </div>
                 
                 <div className="dialect-box" id="dialect-box">
