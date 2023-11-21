@@ -140,7 +140,9 @@ function ChatBox() {
                         <button id="camera-button" onClick={handleCameraClick}><CameraAltIcon style={{ fontSize: '20px' }} /></button>
                         <button id="send-button" enabled="true" onClick={sendMessage}><SendIcon style={{ fontSize: '20px' }} /></button>
                         {/* <button id="send-email-button" onClick={sendMessage}><EmailIcon style={{ fontSize: '20px' }} /></button> */}
-                        <SendEmailButton userEmail={userEmail} onSendEmail={handleSendEmail} />
+                        {/* <SendEmailButton userEmail={userEmail} onSendEmail={handleSendEmail} /> */}
+                        {/* <SendEmailButton userEmail={userEmail} /> */}
+                        <SendEmailButton messages={messages} />
                     </div>
                     {showMicrophonePopup && (
                     <MicrophonePopup onClose={handleCloseMicrophone} onSave={handleSaveAudio} />
