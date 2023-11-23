@@ -1,4 +1,4 @@
-import React, { useState, } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Chatbox.css';
 import CameraPopup from './CameraPopup';
 import MicrophonePopup from './MicrophonePopup';
@@ -7,8 +7,8 @@ import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import SendIcon from '@mui/icons-material/Send';
 import SendEmailButton from './SendEmailButton';
 import { useDispatch, useSelector } from 'react-redux';
-import { setLatestEmail, selectLatestEmail } from './emailSlice';
-import EmailIcon from '@mui/icons-material/Email';
+import { setLatestEmail, selectLatestEmail } from './store/emailSlice';
+// import EmailIcon from '@mui/icons-material/Email';
 
 function ChatBox() {
     const dispatch = useDispatch();
@@ -16,14 +16,21 @@ function ChatBox() {
     const [emailSent, setEmailSent] = useState(false);
 
     const [messages, setMessages] = useState([{ sender: 'chatbot', message: 'Welcome, How may I help you?' }]);
+    
 
     const getLatestEmail = () => {
         const emailMessage = messages.reverse().find(
-          (msg) => msg.sender === 'chatbot' && typeof msg.message === 'string' && msg.message.includes('@')
+            (msg) => msg.sender === 'chatbot' && typeof msg.message === 'string' && msg.message.includes('@')
         );
-    
+
         return emailMessage ? emailMessage.message.match(/\S+@\S+/)[0] : null;
     };
+
+    useEffect(() => {
+        if (latestEmail) {
+            setUserEmail(latestEmail);
+        }
+    }, [latestEmail]);
 
     const [inputText, setInputText] = useState('');
     const [userEmail, setUserEmail] = useState('');
@@ -31,10 +38,10 @@ function ChatBox() {
     const appendMessage = (sender, message, userEmail) => {
         setMessages(prevMessages => [...prevMessages, { sender, message }]);
         if (userEmail) {
-          setUserEmail(userEmail);
+            setUserEmail(userEmail);
         }
     };
-      
+
     const sendMessage = () => {
         const message = inputText.trim();
 
@@ -90,7 +97,7 @@ function ChatBox() {
         // You can use FileSaver.js or similar library for this
         console.log('Audio Blob:', audioBlob);
     }
-        
+
     const generateChatbotResponse = (userMessage) => {
         if (isQuestion(userMessage)) {
             return askQuestion();
@@ -111,9 +118,22 @@ function ChatBox() {
         return userMessage;
     }
 
-    const handleSendEmail = () => {
-        // Add any logic you need when the email is sent
-        console.log('Email sent from ChatBox!');
+    const handleSendEmail = async () => {
+        try {
+          // Add any logic you need when the email is sent
+          console.log('Email sent from ChatBox!');
+          // Call the utility function to handle email sending
+          handleEmailSent();
+        } catch (error) {
+          console.error('Error sending email:', error);
+        }
+    };
+
+    const handleEmailSent = () => {
+        // Add any logic you need when the email is successfully sent
+        setEmailSent(true);
+        // Optionally, you can append a message to indicate email sent
+        appendMessage('chatbot', 'E-Mail sent successfully');
     };
 
     return (
@@ -151,28 +171,30 @@ function ChatBox() {
                     />
                     <div className="input-buttons">
                         <button id="mic-button" onClick={handleMicrophoneClick}>
-                        {isRecording ? <span>Stop Recording</span> : <MicNoneOutlinedIcon style={{ fontSize: '20px' }} />}</button>
+                            {isRecording ? <span>Stop Recording</span> : <MicNoneOutlinedIcon style={{ fontSize: '20px' }} />}</button>
                         <button id="camera-button" onClick={handleCameraClick}><CameraAltIcon style={{ fontSize: '20px' }} /></button>
                         <button id="send-button" enabled="true" onClick={sendMessage}><SendIcon style={{ fontSize: '20px' }} /></button>
-                        {/* <button id="send-email-button" onClick={sendMessage}><EmailIcon style={{ fontSize: '20px' }} /></button> */}
-                        {/* <SendEmailButton userEmail={userEmail} onSendEmail={handleSendEmail} /> */}
-                        {/* <SendEmailButton userEmail={userEmail} /> */}
-                        {/* <SendEmailButton messages={messages} /> */}
-                        <SendEmailButton getLatestEmail={getLatestEmail} />
+                        {/* <SendEmailButton userEmail={userEmail} onSendEmail={handleSendEmail} disabled={emailSent} /> */}
+                        <SendEmailButton getLatestEmail={getLatestEmail} onSendEmail={handleSendEmail} enabled={emailSent} />
+                        {/* {emailSent ? (
+                            <div className="email-sent-message"></div>
+                            ) : (
+                            <SendEmailButton getLatestEmail={getLatestEmail} onSendEmail={handleSendEmail} disabled={emailSent}/>
+                        )} */}
+
                     </div>
                     {showMicrophonePopup && (
-                    <MicrophonePopup onClose={handleCloseMicrophone} onSave={handleSaveAudio} />
+                        <MicrophonePopup onClose={handleCloseMicrophone} onSave={handleSaveAudio} />
                     )}
                     {showCameraPopup && (
-                    <CameraPopup
-                    onClose={() => setShowCameraPopup(false)}
-                    generateChatbotResponse={generateChatbotResponse}
-                    appendMessage={appendMessage}
-                />
-                )}
-                
+                        <CameraPopup
+                            onClose={() => setShowCameraPopup(false)}
+                            generateChatbotResponse={generateChatbotResponse}
+                            appendMessage={appendMessage}
+                        />
+                    )}
                 </div>
-                
+
                 <div className="dialect-box" id="dialect-box">
                     {/* Content for dialect box */}
                 </div>

@@ -1,22 +1,16 @@
 import React from 'react';
-import emailjs from 'emailjs-com';
 import EmailIcon from '@mui/icons-material/Email';
 
-const SendEmailButton = ({ getLatestEmail }) => {
+const SendEmailButton = ({ getLatestEmail, onSendEmail, disabled }) => {
   const handleSendEmail = async () => {
     try {
       const toEmail = await getLatestEmail();
 
       if (toEmail) {
-        const templateParams = {
-          to_email: toEmail,
-          subject: 'Test mail',
-          body: 'Body of the email',
-        };
-
-        await emailjs.send('service_ljvfoq8', 'template_ki2n7c4', templateParams, 'C1dBfgO1y40dtHLJI');
-
-        console.log('Email sent successfully');
+        // Add any additional logic related to sending emails here
+        console.log('Email sent from SendEmailButton!');
+        onSendEmail();
+        
       } else {
         console.error('No email address found in chat messages.');
       }
@@ -26,7 +20,7 @@ const SendEmailButton = ({ getLatestEmail }) => {
   };
 
   return (
-    <button onClick={handleSendEmail}>
+    <button onClick={handleSendEmail} disabled={disabled}>
       <EmailIcon style={{ fontSize: '20px' }} />
     </button>
   );
