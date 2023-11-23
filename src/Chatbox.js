@@ -6,9 +6,15 @@ import MicNoneOutlinedIcon from '@mui/icons-material/MicNoneOutlined';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import SendIcon from '@mui/icons-material/Send';
 import SendEmailButton from './SendEmailButton';
+import { useDispatch, useSelector } from 'react-redux';
+import { setLatestEmail, selectLatestEmail } from './emailSlice';
 import EmailIcon from '@mui/icons-material/Email';
 
 function ChatBox() {
+    const dispatch = useDispatch();
+    const latestEmail = useSelector(selectLatestEmail);
+    const [emailSent, setEmailSent] = useState(false);
+
     const [messages, setMessages] = useState([{ sender: 'chatbot', message: 'Welcome, How may I help you?' }]);
 
     const getLatestEmail = () => {
