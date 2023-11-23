@@ -1,5 +1,5 @@
 import React, { useState, } from 'react';
-import './Chatbox.js';
+import './Chatbox.css';
 import CameraPopup from './CameraPopup';
 import MicrophonePopup from './MicrophonePopup';
 import MicNoneOutlinedIcon from '@mui/icons-material/MicNoneOutlined';
