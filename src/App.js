@@ -1,6 +1,6 @@
 import './App.css';
-import './draft-1';
-import ChatBox from './draft-1';
+import './Chatbox';
+import ChatBox from './Chatbox';
 
 function App() {
   return (

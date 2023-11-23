@@ -1,5 +1,5 @@
 import React, { useState, } from 'react';
-import './draft-1.css';
+import './Chatbox.js';
 import CameraPopup from './CameraPopup';
 import MicrophonePopup from './MicrophonePopup';
 import MicNoneOutlinedIcon from '@mui/icons-material/MicNoneOutlined';
@@ -10,6 +10,15 @@ import EmailIcon from '@mui/icons-material/Email';
 
 function ChatBox() {
     const [messages, setMessages] = useState([{ sender: 'chatbot', message: 'Welcome, How may I help you?' }]);
+
+    const getLatestEmail = () => {
+        const emailMessage = messages.reverse().find(
+          (msg) => msg.sender === 'chatbot' && typeof msg.message === 'string' && msg.message.includes('@')
+        );
+    
+        return emailMessage ? emailMessage.message.match(/\S+@\S+/)[0] : null;
+    };
+
     const [inputText, setInputText] = useState('');
     const [userEmail, setUserEmail] = useState('');
 
@@ -142,7 +151,8 @@ function ChatBox() {
                         {/* <button id="send-email-button" onClick={sendMessage}><EmailIcon style={{ fontSize: '20px' }} /></button> */}
                         {/* <SendEmailButton userEmail={userEmail} onSendEmail={handleSendEmail} /> */}
                         {/* <SendEmailButton userEmail={userEmail} /> */}
-                        <SendEmailButton messages={messages} />
+                        {/* <SendEmailButton messages={messages} /> */}
+                        <SendEmailButton getLatestEmail={getLatestEmail} />
                     </div>
                     {showMicrophonePopup && (
                     <MicrophonePopup onClose={handleCloseMicrophone} onSave={handleSaveAudio} />
