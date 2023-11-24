@@ -8,7 +8,7 @@ import SendIcon from '@mui/icons-material/Send';
 import SendEmailButton from './SendEmailButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLatestEmail, selectLatestEmail } from './store/emailSlice';
-// import EmailIcon from '@mui/icons-material/Email';
+import axios from 'axios'; 
 
 function ChatBox() {
     const dispatch = useDispatch();
@@ -22,10 +22,10 @@ function ChatBox() {
         const emailMessage = messages.reverse().find(
             (msg) => msg.sender === 'chatbot' && typeof msg.message === 'string' && msg.message.includes('@')
         );
-
+    
         return emailMessage ? emailMessage.message.match(/\S+@\S+/)[0] : null;
     };
-
+    
     useEffect(() => {
         if (latestEmail) {
             setUserEmail(latestEmail);
@@ -93,8 +93,6 @@ function ChatBox() {
     }
 
     const handleSaveAudio = (audioBlob) => {
-        // Handle saving the audio Blob locally here
-        // You can use FileSaver.js or similar library for this
         console.log('Audio Blob:', audioBlob);
     }
 
@@ -118,14 +116,49 @@ function ChatBox() {
         return userMessage;
     }
 
+    const sendEmail = async (from, subject, body) => {
+        const toEmail = getLatestEmail();
+    
+        if (!toEmail) {
+            console.error('No recipient email address found.');
+            return; // Don't attempt to send an email without a valid recipient
+        }
+    
+        console.log('Recipient Email:', toEmail);
+    
+        const to = toEmail;
+    
+        try {
+            // Log the email details for debugging
+            console.log('Sending email to:', to);
+            console.log('Email content:', { from, to, subject, body });
+    
+            // Use the send-email endpoint from the server
+            await axios.post('http://localhost:3001/send-email', { from, to, subject, body });
+            console.log('Email sent successfully');
+        } catch (error) {
+            console.error('Error sending email:', error);
+        }
+    };
+
     const handleSendEmail = async () => {
         try {
-          // Add any logic you need when the email is sent
-          console.log('Email sent from ChatBox!');
-          // Call the utility function to handle email sending
-          handleEmailSent();
+            const toEmail = getLatestEmail();
+            console.log('Recipient Email:', toEmail);
+            
+            if (toEmail) {
+                const from = 'botaiml123@gmail.com'; // Replace with the actual sender's email
+                const subject = 'Contact from BOT AI ML';
+                const body = 'Hello Sir/Madam';
+                // Call the sendEmail function with the latest email address
+                await sendEmail(from, subject, body, toEmail);
+                // Call the utility function to handle email sending
+                handleEmailSent();
+            } else {
+                console.error('No email address found in chat messages.');
+            }
         } catch (error) {
-          console.error('Error sending email:', error);
+            console.error('Error sending email:', error);
         }
     };
 
@@ -174,14 +207,8 @@ function ChatBox() {
                             {isRecording ? <span>Stop Recording</span> : <MicNoneOutlinedIcon style={{ fontSize: '20px' }} />}</button>
                         <button id="camera-button" onClick={handleCameraClick}><CameraAltIcon style={{ fontSize: '20px' }} /></button>
                         <button id="send-button" enabled="true" onClick={sendMessage}><SendIcon style={{ fontSize: '20px' }} /></button>
-                        {/* <SendEmailButton userEmail={userEmail} onSendEmail={handleSendEmail} disabled={emailSent} /> */}
                         <SendEmailButton getLatestEmail={getLatestEmail} onSendEmail={handleSendEmail} enabled={emailSent} />
-                        {/* {emailSent ? (
-                            <div className="email-sent-message"></div>
-                            ) : (
-                            <SendEmailButton getLatestEmail={getLatestEmail} onSendEmail={handleSendEmail} disabled={emailSent}/>
-                        )} */}
-
+                        
                     </div>
                     {showMicrophonePopup && (
                         <MicrophonePopup onClose={handleCloseMicrophone} onSave={handleSaveAudio} />
@@ -200,7 +227,7 @@ function ChatBox() {
                 </div>
             </div>
 
-            <footer>
+            <footer class="footer">
                 <p>&copy; BOT AI ML Pvt. Ltd. </p>
             </footer>
         </div>
