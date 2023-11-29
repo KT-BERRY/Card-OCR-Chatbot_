@@ -227,7 +227,7 @@ function ChatBox() {
                 </div>
             </div>
 
-            <footer class="footer">
+            <footer className="footer">
                 <p>&copy; BOT AI ML Pvt. Ltd. </p>
             </footer>
         </div>

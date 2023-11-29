@@ -126,30 +126,6 @@ const CameraPopup = ({ onClose, generateChatbotResponse, appendMessage }) => {
     }
   }
 
-  const handleSendEmail = async () => {
-    const from = 'botaiml123@gmail.com'; // Set a default value or fetch from elsewhere
-    const subject = 'Test mail'; // Set a default value or fetch from elsewhere
-    const body = 'Body of the email'; // Set a default value or fetch from elsewhere
-  
-    // Check if the email is valid (add your own validation logic here)
-    if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(from)) {
-      await sendEmail(from, subject, body);
-    } else {
-      console.error('Invalid email address');
-    }
-  };
-  
-  const sendEmail = async (from, subject, body) => {
-    const to = 'abhishek080403@gmail.com'; // Set a default value or fetch from elsewhere
-    
-    try {
-      await axios.post('http://localhost:3001/send-email', { from, to, subject, body });
-      console.log('Email sent successfully');
-    } catch (error) {
-      console.error('Error sending email:', error);
-    }
-  };
-  
   const startCamera = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
