@@ -174,14 +174,14 @@ function ChatBox() {
         <div>
             <header>
                 <div className="header-content">
-                    <img src={require("./Bot AI ML logo.jpeg")} alt="Your Logo" width="60" height="60" />
+                    {/* <img src={require("./Bot AI ML logo.jpeg")} alt="Your Logo" width="60" height="60" /> */}
                 </div>
             </header>
 
             <div className="chatbox">
                 <div className="chatbox-header">
                     <div className="header-content">
-                        <img src={require("./Bot_AI_ML_logo-removebg-preview.png")} alt="Your Logo" width="10%" height="5%" />
+                        {/* <img src={require("./Bot_AI_ML_logo-removebg-preview.png")} alt="Your Logo" width="10%" height="5%" /> */}
                         <div className="chatbox-header-text">Chat Box</div>
                     </div>
                 </div>
@@ -229,7 +229,8 @@ function ChatBox() {
             </div>
 
             <footer className="footer">
-                <p>&copy; BOT AI ML Pvt. Ltd. </p>
+                {/* <p>&copy; BOT AI ML Pvt. Ltd. </p> */}
+                <p>&copy; Vellore Institute of Technology, Chennai </p>
             </footer>
         </div>
     );
